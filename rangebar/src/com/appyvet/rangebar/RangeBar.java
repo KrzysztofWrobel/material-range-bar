@@ -327,9 +327,12 @@ public class RangeBar extends View {
         if (mIsRangeBar) {
             mLeftThumb.setX(marginLeft + (mLeftIndex / (float) (mTickCount - 1)) * barLength);
             mLeftThumb.setXValue(getPinText(mLeftIndex));
+            pressPin(mLeftThumb);
+
         }
         mRightThumb.setX(marginLeft + (mRightIndex / (float) (mTickCount - 1)) * barLength);
         mRightThumb.setXValue(getPinText(mRightIndex));
+        pressPin(mRightThumb);
 
         // Set the thumb indices.
         final int newLeftIndex = mIsRangeBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
@@ -1135,9 +1138,10 @@ public class RangeBar extends View {
             }
 
             // Get the updated nearest tick marks for each thumb.
-            final int newLeftIndex = mIsRangeBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
-            final int newRightIndex = mBar.getNearestTickIndex(mRightThumb);
+            final int newLeftIndex = mIsRangeBar ? Math.max(0, mBar.getNearestTickIndex(mLeftThumb)) : 0;
+            final int newRightIndex = Math.min(mTickCount - 1, mBar.getNearestTickIndex(mRightThumb));
             // If either of the indices have changed, update and call the listener.
+
             if (newLeftIndex != mLeftIndex) {
                 mLeftIndex = newLeftIndex;
                 notifyRangeMinChanged(true);
@@ -1295,9 +1299,18 @@ public class RangeBar extends View {
 
     public void setTickMap(HashMap<Integer, String> mTickMap) {
         this.mTickMap = mTickMap;
+        if (isRangeBar()) {
+            if (mIsRangeBar && mLeftThumb != null) {
+                mLeftThumb.setXValue(getPinText(mLeftIndex));
+            }
+        }
+
+        if (mRightThumb != null) {
+            mRightThumb.setXValue(getPinText(mRightIndex));
+        }
     }
 
-    // Inner Classes ///////////////////////////////////////////////////////////
+// Inner Classes ///////////////////////////////////////////////////////////
 
     /**
      * A callback that notifies clients when the RangeBar has changed. The
@@ -1305,7 +1318,6 @@ public class RangeBar extends View {
      * for every movement of the thumb.
      */
     public static interface OnRangeBarChangeListener {
-
 
         void onRangeMinMovingListener(RangeBar rangeBar, int leftPinIndex, float leftPinValue, String leftPinText, boolean fromUser);
 
