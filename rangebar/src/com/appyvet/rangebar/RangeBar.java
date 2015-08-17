@@ -68,7 +68,7 @@ public class RangeBar extends View {
 
     private static final float DEFAULT_TICK_HEIGHT_DP = 1;
 
-    private static final float DEFAULT_PIN_PADDING_DP = 16;
+    private static final float DEFAULT_PIN_PADDING_DP = 3;
 
     private static final float DEFAULT_BAR_WEIGHT_PX = 2;
 
@@ -90,7 +90,7 @@ public class RangeBar extends View {
 
     private static final float DEFAULT_CIRCLE_SIZE_DP = 5;
 
-    private static final float DEFAULT_BAR_PADDING_BOTTOM_DP = 24;
+    private static final float DEFAULT_BAR_PADDING_BOTTOM_DP = 5;
 
     // Instance variables for all of the customizable attributes
 
@@ -1123,19 +1123,6 @@ public class RangeBar extends View {
 
         }
         {
-
-            float leftThumbXDistance = mIsRangeBar ? Math.abs(mLeftThumb.getX() - x) : 0;
-            float rightThumbXDistance = Math.abs(mRightThumb.getX() - x);
-
-            if (leftThumbXDistance < rightThumbXDistance) {
-                if (mIsRangeBar) {
-                    mLeftThumb.setX(x);
-                    releasePin(mLeftThumb);
-                }
-            } else {
-                mRightThumb.setX(x);
-                releasePin(mRightThumb);
-            }
 
             // Get the updated nearest tick marks for each thumb.
             final int newLeftIndex = mIsRangeBar ? Math.max(0, mBar.getNearestTickIndex(mLeftThumb)) : 0;
